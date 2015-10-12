@@ -8,7 +8,7 @@ This library simplifies the wiring of an application by injecting dependencies b
 
 A *module* is go struct containing fields tagged with 'inject' or 'provide' keys. When a set of modules are
 *bound*, fields tagged 'inject' are set with values from corresponding fields tagged 'provide', respecting type and
-(optionally) name. Provided fields may either be set normally prior to binding, during binding from a module's 'Provide'
+(optionally) name. Provided fields may either be set normally prior to binding, during binding from a module's *Provide*
 method, or from function calls tied to additional tag keys.
 
 ## How to Use
@@ -93,7 +93,7 @@ valueSetters := modules.ValueSetters(map[string]ValueSetter{
 })
 binder := modules.NewBinder(valueSetters)
 module := struct{
-  FieldA CustomType 'customTag:"tagValueArgument"'
+  FieldA CustomType 'provide:"someField" customTag:"tagValueArgument"'
 }
 _ := binder.Bind(module)
 ```
