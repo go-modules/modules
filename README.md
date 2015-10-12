@@ -52,14 +52,15 @@ type module struct {
 }
 // Implements modules.Provider
 func (m *Module) Provide() {
-  // Note that injected fields have not yet necessarily been set at this point, so they may not be accessed directly, but they may be closed over.
+  // Note that injected fields have not yet necessarily been set at this point, so
+  // they may not be accessed directly, but they may be closed over.
   m.FieldB = func() string {
     return = m.FieldA
   }
 }
 ```
 
-Additionally, a Binder may be configured to recognize certain tag keys and call a tags.ValueSetter to set a value.
+Additionally, a *Binder* may be configured to recognize certain tag keys and call a *ValueSetter* to set a value.
 The 'literal' tag key is built-in, and parses string tag values into standard supported types.
 ```go
 type module struct {
@@ -70,7 +71,7 @@ type module struct {
 ```
 
 ### Binders
-Modules are bound using a modules.Binder. Binders are created with the modules.NewBinder function, which optionally
+Modules are bound using a *Binder*. Binders are created with the *NewBinder* function, which optionally
 accepts functional option arguments.
 ```go
 binder := modules.NewBinder(modules.LogWriter(os.Stdout))
@@ -78,14 +79,14 @@ binder := modules.NewBinder(modules.LogWriter(os.Stdout))
 This binder logs information to stdout.
 
 The *Bind* method binds a set of modules. All binding and injection occurs during this call. Modules implementing
-modules.Provider will have their Provide method called as well. Exported module fields are scanned for 'provide',
+*Provider* will have their *Provide* method called as well. Exported module fields are scanned for 'provide',
 'inject' or other recognized tag keys.
 ```go
 _ := binder.Bind(appModule, dataModule, serviceModule)
 ```
 This call binds 3 modules. Each module's provided fields are available for injection into any module.
 
-The functional option modules.ValueSetters can be used to map custom or third party tags to tags.ValueSetters.
+The functional option *ValueSetters* can be used to map custom or third party tags to *ValueSetter*s.
 ```go
 valueSetters := modules.ValueSetters(map[string]ValueSetter{
   "customTag": customTag.ValueSetter,
@@ -96,4 +97,4 @@ module := struct{
 }
 _ := binder.Bind(module)
 ```
-When this module is bound, customTag.ValueSetter may set the value of FieldA based on the tag value "tagValueArgument".
+When this module is bound, *customTag.ValueSetter* may set the value of FieldA based on the tag value "tagValueArgument".
