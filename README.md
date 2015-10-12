@@ -1,4 +1,4 @@
-# go-modules
+# Go Modules [![Build Status](https://travis-ci.org/go-modules/modules.svg)](https://travis-ci.org/go-modules/modules)
 A dependency injection library using struct tags.
 
 This project is currently alpha and subject to experimental change.
