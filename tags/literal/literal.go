@@ -14,7 +14,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"github.com/jmank88/go-modules/tags"
+	"github.com/go-modules/modules/tags"
 )
 
 // ValueSetter is a tags.ValueSetter for parsing string literals.

@@ -7,8 +7,8 @@ import (
 	"sync"
 	"errors"
 	"log"
-	"github.com/jmank88/go-modules/tags"
-	"github.com/jmank88/go-modules/tags/literal"
+	"github.com/go-modules/modules/tags"
+	"github.com/go-modules/modules/tags/literal"
 	"fmt"
 )
 

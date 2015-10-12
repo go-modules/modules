@@ -2,7 +2,7 @@ package modules
 
 import (
 	"reflect"
-	"github.com/jmank88/go-modules/tags"
+	"github.com/go-modules/modules/tags"
 	"errors"
 	"sync"
 	"fmt"
