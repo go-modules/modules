@@ -1,4 +1,4 @@
-# Go Modules [![GoDoc](https://godoc.org/github.com/go-modules/modules?status.svg)](https://godoc.org/github.com/go-modules/modules) [![Build Status](https://travis-ci.org/go-modules/modules.svg)](https://travis-ci.org/go-modules/modules) [![Coverage Status](https://coveralls.io/repos/go-modules/modules/badge.svg?branch=master&service=github)](https://coveralls.io/github/go-modules/modules?branch=master)
+# Go Modules [![GoDoc](https://godoc.org/github.com/go-modules/modules?status.svg)](https://godoc.org/github.com/go-modules/modules) [![Build Status](https://travis-ci.org/go-modules/modules.svg)](https://travis-ci.org/go-modules/modules)
 A dependency injection library using struct tags.
 
 This project is currently alpha and subject to experimental change.
