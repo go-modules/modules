@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"os"
 	"github.com/go-modules/modules/tags"
-	"github.com/jmank88/go-modules/tags/literal"
+	"github.com/go-modules/modules/tags/literal"
 )
 
 var ValueSetter = tags.ValueSetterFunc(valueSetterFunc)
