@@ -17,7 +17,7 @@ type ValueSetter interface {
 	SetValue(reflect.Value, string) (bool, error)
 }
 
-// A ValueSetterFunc may be used as a ValueSetter.
+// ValueSetterFunc implements ValueSetter.
 type ValueSetterFunc func(reflect.Value, string) (bool, error)
 
 // SetValue implements the ValueSetter interface.
