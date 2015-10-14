@@ -51,11 +51,9 @@ func (b *binding) inject(key bindKey, fieldValue reflect.Value) {
 }
 
 // provide binds value to key.
-// Each recognized tag's tags.ValueSetFn will be executed until one sets the value.
+// Each recognized tag key's tags.ValueSetter will be executed until one sets the value.
 func (b *binding) provide(key bindKey, singleton bool, tag tags.StructTag, value reflect.Value) error {
-	// Range over tag fields until a know tag key's tags.ValueSetFn sets the value.
-	// Note: We can't detect if value has already been set, so a mis-configured module could result in a tag overriding
-	// a value set during Provide().
+	// Range over tag fields until a known tag key's tags.ValueSetter sets the value.
 	tag.ForEach(tags.Handler(func(tagKey, v string) (bool, error) {
 		if tagKey == "provide" {
 			return false, nil

@@ -10,6 +10,7 @@ import (
 	"github.com/go-modules/modules/tags"
 	"github.com/go-modules/modules/tags/literal"
 	"fmt"
+	"github.com/go-modules/modules/tags/env"
 )
 
 // A Provider is a binding module that implements the Provide() method.
@@ -34,6 +35,7 @@ func NewBinder(options ...BinderOption) *Binder {
 	b := &Binder{
 		valueSetters: map[string]tags.ValueSetter{
 			"literal": literal.ValueSetter,
+			"env": env.ValueSetter,
 		},
 	}
 
