@@ -31,7 +31,7 @@ func TestValueSetter(t *testing.T) {
 		if err := flags.Parse(testCase.args); err != nil {
 			t.Fatalf("failed to set command line flags: ", err)
 		}
-		
+
 		if ok, err := (&valueSetter{flags}).SetValue(testCase.value, testCase.tagValue); err != nil {
 			t.Error(err)
 		} else if !ok {

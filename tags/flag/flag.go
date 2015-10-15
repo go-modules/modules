@@ -8,7 +8,7 @@ import (
 	stdFlag "flag"
 	"github.com/go-modules/modules/tags/literal"
 )
-//TODO what if we have a stateful ValueSetter, which references CommandLine normally, but can be tested with a different one we init...
+
 var ValueSetter = &valueSetter{stdFlag.CommandLine}
 
 // A valueSetter wraps a FlagSet and implements tags.ValueSetter
