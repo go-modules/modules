@@ -1,6 +1,6 @@
 // Package tags contains code for parsing struct tags, and creating and working with ValueSetters.
-// The 'provide' and 'inject' tags identify providers and injectors, and are treated specially. All other tags are
-// eligible to be mapped to a ValueSetter. Each listed struct tag will is processed in order, until one sets the value.
+// The 'provide' and 'inject' tag keys identify providers and injectors, and are reserved. All other tag keys are
+// eligible to be mapped to a ValueSetter. Each listed struct tag key is processed in order, until one sets the value.
 package tags
 
 import (
