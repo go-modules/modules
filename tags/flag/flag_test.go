@@ -1,18 +1,18 @@
 package flag
 
 import (
-	"testing"
-	"reflect"
 	"flag"
+	"reflect"
+	"testing"
 )
 
 func TestValueSetter(t *testing.T) {
-	for _,testCase := range []struct {
-		value reflect.Value
+	for _, testCase := range []struct {
+		value    reflect.Value
 		tagValue string
-		args []string
+		args     []string
 		expected reflect.Value
-	} {
+	}{
 		{
 			reflect.New(reflect.TypeOf("")).Elem(),
 			"flagName",

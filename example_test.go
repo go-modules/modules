@@ -13,7 +13,7 @@ type KVClient interface {
 // A MapDBClient is a simple mock KVClient implementation backed by a map and configured with a default value for missing keys.
 type MapDBClient struct {
 	defaultValue string
-	db map[string]string
+	db           map[string]string
 }
 
 func (client *MapDBClient) Get(key string) string {
@@ -46,11 +46,11 @@ type defaultValue string
 // This data module provides a Client function for retrieving a KVClient, which returns a DBClient configured with the
 // injected default value.
 type DataModule struct {
-	DefaultValue defaultValue `inject:""`
-	Client func() KVClient `provide:",singleton"`
+	DefaultValue defaultValue    `inject:""`
+	Client       func() KVClient `provide:",singleton"`
 }
 
-func (data *DataModule)	Provide() error {
+func (data *DataModule) Provide() error {
 	data.Client = func() KVClient {
 		return &MapDBClient{defaultValue: string(data.DefaultValue), db: make(map[string]string)}
 	}
@@ -63,7 +63,7 @@ func Example() {
 	// This config module provides the default value required by the data module.
 	configModule := &struct {
 		DefaultValue defaultValue `provide:""`
-	} {
+	}{
 		DefaultValue: "default",
 	}
 

@@ -68,7 +68,6 @@ func TestTwoWayBind(t *testing.T) {
 	assertString(t, "value2", moduleB.Field2)
 }
 
-
 // TestSingleton tests a simple singleton binding.
 // Both moduleA and moduleB inject the singleton string function provided by moduleC.
 func TestSingleton(t *testing.T) {
@@ -80,7 +79,7 @@ func TestSingleton(t *testing.T) {
 	}{}
 	moduleC := &struct {
 		TestProvider func() string `provide:"test,singleton"`
-	} {
+	}{
 		TestProvider: func() string {
 			return "testValue"
 		},

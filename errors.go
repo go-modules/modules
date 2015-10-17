@@ -1,4 +1,5 @@
 package modules
+
 import (
 	"bytes"
 	"fmt"
@@ -6,7 +7,7 @@ import (
 
 // An AnnotatedError holds a message and wraps another error.
 type AnnotatedError struct {
-	msg string
+	msg   string
 	cause error
 }
 

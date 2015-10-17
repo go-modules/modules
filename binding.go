@@ -1,13 +1,12 @@
 package modules
 
 import (
-	"reflect"
-	"github.com/go-modules/modules/tags"
 	"errors"
-	"sync"
 	"fmt"
+	"github.com/go-modules/modules/tags"
+	"reflect"
+	"sync"
 )
-
 
 // newBinding returns a new binding configured with binder
 func newBinding(binder *Binder) *binding {

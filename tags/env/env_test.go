@@ -1,18 +1,18 @@
 package env
 
 import (
-	"testing"
 	"os"
 	"reflect"
+	"testing"
 )
 
 func TestValueSetter(t *testing.T) {
-	for _,testCase := range []struct {
-		value reflect.Value
+	for _, testCase := range []struct {
+		value    reflect.Value
 		tagValue string
-		envVars map[string]string
+		envVars  map[string]string
 		expected reflect.Value
-	} {
+	}{
 		{
 			reflect.New(reflect.TypeOf("")).Elem(),
 			"envVarName",
@@ -31,7 +31,7 @@ func TestValueSetter(t *testing.T) {
 		},
 	} {
 		os.Clearenv()
-		for k,v := range testCase.envVars {
+		for k, v := range testCase.envVars {
 			if err := os.Setenv(k, v); err != nil {
 				t.Errorf("failed to set environment variable", err)
 			}

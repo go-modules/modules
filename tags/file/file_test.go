@@ -1,11 +1,11 @@
 package file
 
 import (
-	"testing"
-	"reflect"
 	"encoding/xml"
-	"os"
 	"io/ioutil"
+	"os"
+	"reflect"
+	"testing"
 )
 
 type JsonType struct {
@@ -14,7 +14,7 @@ type JsonType struct {
 
 type XmlType struct {
 	XMLName xml.Name `xml:"xml"`
-	Test string `xml:"test"`
+	Test    string   `xml:"test"`
 }
 
 type GobType struct {
@@ -23,36 +23,36 @@ type GobType struct {
 
 func TestValueSetter(t *testing.T) {
 
-	for _,testCase := range []struct {
-		value reflect.Value
+	for _, testCase := range []struct {
+		value    reflect.Value
 		tagValue string
 		expected reflect.Value
-	} {
+	}{
 		{
-			value: reflect.ValueOf(new(string)).Elem(),
+			value:    reflect.ValueOf(new(string)).Elem(),
 			tagValue: "test.txt",
 			expected: reflect.ValueOf("test"),
 		},
 		{
-			value: reflect.ValueOf(&JsonType{}),
+			value:    reflect.ValueOf(&JsonType{}),
 			tagValue: "test.json",
 			expected: reflect.ValueOf(&JsonType{"test"}),
 		},
 		{
-			value: reflect.ValueOf(&XmlType{}),
+			value:    reflect.ValueOf(&XmlType{}),
 			tagValue: "test.xml",
 			expected: reflect.ValueOf(&XmlType{
-				XMLName: xml.Name{Local:"xml"},
-				Test:"test",
+				XMLName: xml.Name{Local: "xml"},
+				Test:    "test",
 			}),
 		},
 		{
-			value: reflect.ValueOf(&GobType{}),
+			value:    reflect.ValueOf(&GobType{}),
 			tagValue: "test.gob",
 			expected: reflect.ValueOf(&GobType{"test"}),
 		},
 		{
-			value: reflect.ValueOf(new(string)).Elem(),
+			value:    reflect.ValueOf(new(string)).Elem(),
 			tagValue: "test_text,txt",
 			expected: reflect.ValueOf("test"),
 		},

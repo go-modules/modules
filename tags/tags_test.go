@@ -1,6 +1,6 @@
 package tags
-import "testing"
 
+import "testing"
 
 func TestForEach(t *testing.T) {
 	var handled bool
@@ -13,7 +13,7 @@ func TestForEach(t *testing.T) {
 		}
 	})
 
-	for _, testTag := range []StructTag {
+	for _, testTag := range []StructTag{
 		`handle:"value"`,
 		`skip:"value" handle:"value"`,
 		`skip:"value" handle:"value" skip2:"value"`,
@@ -26,7 +26,7 @@ func TestForEach(t *testing.T) {
 		}
 	}
 
-	for _, testTag := range []StructTag {
+	for _, testTag := range []StructTag{
 		`skip:"value"`,
 		`skip:"value" skip2:"value"`,
 		`skip:"value" skip2:"value" skip3:"value"`,
@@ -41,7 +41,7 @@ func TestForEach(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	for _, testCase := range []StructTag {
+	for _, testCase := range []StructTag{
 		`key1:"value1"`,
 		`key2:"value2" key1:"value1"`,
 		`key2:"value2" key1:"value1" key3:"value3"`,

@@ -2,17 +2,17 @@
 package modules
 
 import (
+	"errors"
+	"fmt"
+	"github.com/go-modules/modules/tags"
+	"github.com/go-modules/modules/tags/env"
+	"github.com/go-modules/modules/tags/file"
+	"github.com/go-modules/modules/tags/flag"
+	"github.com/go-modules/modules/tags/literal"
 	"io"
+	"log"
 	"reflect"
 	"sync"
-	"errors"
-	"log"
-	"github.com/go-modules/modules/tags"
-	"github.com/go-modules/modules/tags/literal"
-	"fmt"
-	"github.com/go-modules/modules/tags/env"
-	"github.com/go-modules/modules/tags/flag"
-	"github.com/go-modules/modules/tags/file"
 )
 
 // A Provider is a binding module that implements the Provide() method.
@@ -37,13 +37,13 @@ func NewBinder(options ...BinderOption) *Binder {
 	b := &Binder{
 		valueSetters: map[string]tags.ValueSetter{
 			"literal": literal.ValueSetter,
-			"env": env.ValueSetter,
-			"flag": flag.ValueSetter,
-			"file": file.ValueSetter,
+			"env":     env.ValueSetter,
+			"flag":    flag.ValueSetter,
+			"file":    file.ValueSetter,
 		},
 	}
 
-	for _,option := range options {
+	for _, option := range options {
 		option.configure(b)
 	}
 	return b
@@ -67,7 +67,7 @@ func (l Logger) configure(b *Binder) {
 type ValueSetters map[string]tags.ValueSetter
 
 func (v ValueSetters) configure(b *Binder) {
-	for k,v := range v {
+	for k, v := range v {
 		b.valueSetters[k] = v
 	}
 }

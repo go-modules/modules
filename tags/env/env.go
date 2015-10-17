@@ -3,10 +3,10 @@
 package env
 
 import (
-	"reflect"
-	"os"
 	"github.com/go-modules/modules/tags"
 	"github.com/go-modules/modules/tags/literal"
+	"os"
+	"reflect"
 )
 
 var ValueSetter = tags.ValueSetterFunc(valueSetterFunc)

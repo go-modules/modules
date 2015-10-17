@@ -11,10 +11,10 @@ package literal
 import (
 	"errors"
 	"fmt"
+	"github.com/go-modules/modules/tags"
 	"reflect"
 	"strconv"
 	"strings"
-	"github.com/go-modules/modules/tags"
 )
 
 // ValueSetter is a tags.ValueSetter for parsing string literals.
@@ -59,9 +59,9 @@ func (valueMaker) MakeFloat(str string, bitSize int) (bool, float64, error) {
 // Parses str into a complex value.
 // Implements tags.ComplexMaker
 func (valueMaker) MakeComplex(str string, bits int) (bool, complex128, error) {
-	values := strings.Split(str,",")
+	values := strings.Split(str, ",")
 	if values == nil || len(values) != 2 {
-		return false, 0+0i, errors.New("illegal complex literal. expected 2 comma separated values")
+		return false, 0 + 0i, errors.New("illegal complex literal. expected 2 comma separated values")
 	}
 	var floatBitSize int
 	if bits == 64 {
@@ -71,11 +71,11 @@ func (valueMaker) MakeComplex(str string, bits int) (bool, complex128, error) {
 	}
 	real, err := strconv.ParseFloat(values[0], floatBitSize)
 	if err != nil {
-		return false, 0+0i, err
+		return false, 0 + 0i, err
 	}
 	imaginary, err := strconv.ParseFloat(values[1], floatBitSize)
 	if err != nil {
-		return false, 0+0i, err
+		return false, 0 + 0i, err
 	}
 	return true, complex(real, imaginary), nil
 }
@@ -151,7 +151,7 @@ func (valueMaker) MakeChan(str string, typeOfElem reflect.Type) (bool, uintptr, 
 // Implements tags.FuncMaker
 func (valueMaker) MakeFunc(str string, typeOfFn reflect.Type) (bool, uintptr, error) {
 	typeOfFnRet := typeOfFn.Out(0)
-	ret := make([]reflect.Value,1)
+	ret := make([]reflect.Value, 1)
 	if reflect.TypeOf(str).AssignableTo(typeOfFnRet) {
 		ret[0] = reflect.ValueOf(str)
 	} else if reflect.TypeOf(str).ConvertibleTo(typeOfFnRet) {

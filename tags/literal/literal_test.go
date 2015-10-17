@@ -7,7 +7,7 @@ import (
 var fixture = &valueMaker{}
 
 func TestMakeString(t *testing.T) {
-	for _, literal := range []string{"test",""} {
+	for _, literal := range []string{"test", ""} {
 		if ok, got, err := fixture.MakeString(literal); err != nil {
 			t.Errorf("unexpected error: %s", err)
 		} else if !ok {
@@ -20,9 +20,9 @@ func TestMakeString(t *testing.T) {
 
 func TestMakeBool(t *testing.T) {
 	for _, testCase := range []struct {
-		literal string
+		literal  string
 		expected bool
-	} {
+	}{
 		{"true", true},
 		{"false", false},
 	} {
@@ -38,10 +38,10 @@ func TestMakeBool(t *testing.T) {
 
 func TestMakeInt(t *testing.T) {
 	for _, testCase := range []struct {
-		literal string
-		bitSize int
+		literal  string
+		bitSize  int
 		expected int64
-	} {
+	}{
 		{"1", 0, 1},
 		{"-127", 8, -127},
 		{"32767", 16, 32767},
@@ -60,10 +60,10 @@ func TestMakeInt(t *testing.T) {
 
 func TestMakeUint(t *testing.T) {
 	for _, testCase := range []struct {
-		literal string
-		bitSize int
+		literal  string
+		bitSize  int
 		expected uint64
-	} {
+	}{
 		{"1", 0, 1},
 		{"255", 8, 255},
 		{"65535", 16, 65535},
@@ -82,10 +82,10 @@ func TestMakeUint(t *testing.T) {
 
 func TestMakeFloat(t *testing.T) {
 	for _, testCase := range []struct {
-		literal string
-		bitSize int
+		literal  string
+		bitSize  int
 		expected float64
-	} {
+	}{
 		{"1", 32, 1},
 		{"10.0", 32, 10.0},
 		{"200.345", 64, 200.345},
@@ -104,12 +104,12 @@ func TestMakeFloat(t *testing.T) {
 
 func TestMakeComplex(t *testing.T) {
 	for _, testCase := range []struct {
-		literal string
-		bitSize int
+		literal  string
+		bitSize  int
 		expected complex64
-	} {
-		{"1,1", 64, 1+1i},
-		{"10.1,-6", 64, 10.1+-6i},
+	}{
+		{"1,1", 64, 1 + 1i},
+		{"10.1,-6", 64, 10.1 + -6i},
 	} {
 		if ok, got, err := fixture.MakeComplex(testCase.literal, testCase.bitSize); err != nil {
 			t.Errorf("unexpected error: %s", err)
@@ -121,13 +121,13 @@ func TestMakeComplex(t *testing.T) {
 	}
 
 	for _, testCase := range []struct {
-		literal string
-		bitSize int
+		literal  string
+		bitSize  int
 		expected complex128
-	} {
-		{"-200,-600", 128, -200+-600i},
-		{"1234,56", 128, 1234+56i},
-		{"654321,123", 128, 654321+123i},
+	}{
+		{"-200,-600", 128, -200 + -600i},
+		{"1234,56", 128, 1234 + 56i},
+		{"654321,123", 128, 654321 + 123i},
 	} {
 		if ok, got, err := fixture.MakeComplex(testCase.literal, testCase.bitSize); err != nil {
 			t.Errorf("unexpected error: %s", err)

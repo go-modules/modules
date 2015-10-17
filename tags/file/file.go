@@ -8,16 +8,17 @@
 // File type is derived from the file extension, or optionally overridden by a tag option.
 // Supported types include: txt, json, xml, gob
 package file
+
 import (
-	"github.com/go-modules/modules/tags"
-	"reflect"
-	"os"
-	"path/filepath"
-	"fmt"
-	"io/ioutil"
+	"encoding/gob"
 	"encoding/json"
 	"encoding/xml"
-	"encoding/gob"
+	"fmt"
+	"github.com/go-modules/modules/tags"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"reflect"
 )
 
 var ValueSetter = tags.ValueSetterFunc(valueSetterFunc)

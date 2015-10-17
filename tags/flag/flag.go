@@ -4,9 +4,9 @@
 package flag
 
 import (
-	"reflect"
 	stdFlag "flag"
 	"github.com/go-modules/modules/tags/literal"
+	"reflect"
 )
 
 var ValueSetter = &valueSetter{stdFlag.CommandLine}
