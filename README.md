@@ -10,14 +10,14 @@ This library simplifies the wiring of an application by injecting dependencies b
 
 A *module* is go struct containing fields tagged with 'inject' or 'provide' keys. When a set of modules are
 *bound*, fields tagged 'inject' are set with values from corresponding fields tagged 'provide', respecting type and
-(optionally) name. Provided fields may either be set normally prior to binding, during binding from a module's *Provide*
-method, or from function calls tied to additional tag keys.
+ name. Provided fields may be set normally prior to binding, during binding from a module's *Provide* method, or from
+ *Injector*s triggered by additional tag keys.
 
 ## How to Use
 
 ### Modules
-A *module* is any tagged go struct. The 'inject' and 'provide' tag keys are treated specially. Other tag keys may be
-registered with a Binder and trigger special processing. Unexported fields, and fields without recognized tags will be
+A *module* is any tagged struct. The 'inject' and 'provide' tag keys are treated specially. Other tag keys may be
+registered with a *Binder* to trigger *Injector*s. Unexported fields, and fields without recognized tags will be
 ignored during binding.
 ```go
 type simpleModule struct {
@@ -30,12 +30,13 @@ type simpleModule struct {
   fieldD string
 }
 ```
-When simpleModule is bound, it provides the string value named 'provideMe' via FieldB to the Binder, and expects the
+When simpleModule is bound, it provides the string value named 'provideMe' via FieldB to the *Binder*, and expects the
 string dependency named 'injectMe' to be provided by another module and injected into FieldA. FieldC and fieldD will be
-ignored by the Binder.
+ignored by the *Binder*.
+
 
 ### Providers
-There are a few different ways for a module to provide values.
+There are a few different ways for a *module* to provide values.
 
 Fields may be set normally prior to binding.
 ```go
@@ -49,18 +50,18 @@ module := struct {
 Modules implementing the *Provider* interface may set fields from the *Provide* method.
 ```go
 type module struct {
-  FieldA string 'inject:"injectMe"'
-  FieldB func() string 'provide:"provideMe"'
+  Field string 'inject:"injectMe"'
+  Func func() string 'provide:"provideMe"'
 }
 // Implements modules.Provider
 func (m *Module) Provide() {
-  // Note that injected fields have not yet necessarily been set at this point, so
-  // they may not be accessed directly, but they may be closed over.
-  m.FieldB = func() string {
-    return = m.FieldA
+  m.Func = func() string {
+    return = m.Field
   }
 }
 ```
+The *Provide* method is called during binding. Injected fields have not yet necessarily been set when *Provide* is
+called, so they may not be accessed directly, but they may be closed over.
 
 Additionally, a *Binder* may be configured to recognize certain tag keys and call an *Injector* to set a value.
 The 'literal' tag key is built-in, and parses string tag values into standard supported types.
@@ -81,8 +82,8 @@ binder := modules.NewBinder(modules.LogWriter(os.Stdout))
 This binder logs information to stdout.
 
 The *Bind* method binds a set of modules. All binding and injection occurs during this call. Modules implementing
-*Provider* will have their *Provide* method called as well. Exported module fields are scanned for 'provide',
-'inject' or other recognized tag keys.
+*Provider* will have their *Provide* method called. Exported module fields are scanned for 'provide', 'inject' or other
+registered tag keys.
 ```go
 _ := binder.Bind(appModule, dataModule, serviceModule)
 ```

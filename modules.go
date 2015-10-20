@@ -123,13 +123,13 @@ func (binder *Binder) Bind(modules ...interface{}) error {
 				injections.Add(1)
 				go func() {
 					// Blocks until a provider binds key, or cancelled.
-					binding.inject(bindKey{value.Type(), bindName}, value)
+					binding.inject(bindName, value)
 					injections.Done()
 				}()
 			} else if tagValue, ok := tag.Get("provide"); ok {
 				bindName, options := tags.ParseTag(tagValue)
 				// Releases blocking injections for key.
-				if err := binding.provide(bindKey{value.Type(), bindName}, options.Contains("singleton"), tag, value); err != nil {
+				if err := binding.provide(bindName, options.Contains("singleton"), tag, value); err != nil {
 					binding.errors <- err
 				}
 			}

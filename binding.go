@@ -33,15 +33,16 @@ type binding struct {
 	errors chan error
 }
 
-// Injects the value bound to key into fieldValue.
-func (b *binding) inject(key bindKey, fieldValue reflect.Value) {
+// Injects the value bound to bindName into value.
+func (b *binding) inject(bindName string, value reflect.Value) {
+	key := bindKey{value.Type(), bindName}
 	// Wait to inject this field after it has been provided, or binding cancelled.
 	select {
 	case <-b.cancel:
 		b.logf("nothing bound to %s\n", key.String())
 	case <-b.gates.get(key):
 		if bound, ok := b.fields.get(key); ok {
-			fieldValue.Set(bound)
+			value.Set(bound)
 			b.logf("%v <- %s\n", bound, key.String())
 		} else {
 			b.logf("nothing bound to %s\n", key.String())
@@ -49,9 +50,10 @@ func (b *binding) inject(key bindKey, fieldValue reflect.Value) {
 	}
 }
 
-// provide binds value to key.
+// provide binds value to bindName.
 // Each recognized tag key's inject.Injector will be executed until one sets the value.
-func (b *binding) provide(key bindKey, singleton bool, tag tags.StructTag, value reflect.Value) error {
+func (b *binding) provide(bindName string, singleton bool, tag tags.StructTag, value reflect.Value) error {
+	key := bindKey{value.Type(), bindName}
 	// Range over tag fields until a known tag key's inject.Injector sets the value.
 	tag.ForEach(tags.Handler(func(tagKey, v string) (bool, error) {
 		if tagKey == "provide" {
