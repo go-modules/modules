@@ -1,29 +1,10 @@
-// Package tags contains code for parsing struct tags, and creating and working with ValueSetters.
-// The 'provide' and 'inject' tag keys identify providers and injectors, and are reserved. All other tag keys are
-// eligible to be mapped to a ValueSetter. Each listed struct tag key is processed in order, until one sets the value.
+// Package tags contains code for parsing struct tags.
 package tags
 
 import (
-	"reflect"
 	"strconv"
 	"strings"
 )
-
-// A ValueSetter sets a value based on a string.
-type ValueSetter interface {
-	// May set a value based on string.
-	// Returns (true, nil) when a value has been set, or (false, nil) when a value has not been set (e.g. environment
-	// variable not set, file not found, etc.).
-	SetValue(reflect.Value, string) (bool, error)
-}
-
-// ValueSetterFunc implements ValueSetter.
-type ValueSetterFunc func(reflect.Value, string) (bool, error)
-
-// SetValue implements the ValueSetter interface.
-func (f ValueSetterFunc) SetValue(value reflect.Value, tagValue string) (bool, error) {
-	return f(value, tagValue)
-}
 
 // A StructTag aliases a struct tag string to add parsing functionality.
 type StructTag string
@@ -136,13 +117,4 @@ func (o TagOptions) Contains(optionName string) bool {
 		s = next
 	}
 	return false
-}
-
-// An UnsupportedKindError indicates that a value maker does not support a certain reflect.Kind.
-type UnsupportedKindError struct {
-	reflect.Kind
-}
-
-func (e *UnsupportedKindError) Error() string {
-	return "value maker does not support kind: " + e.Kind.String()
 }

@@ -1,21 +1,21 @@
-package tags
+package inject
 
 import "reflect"
 
-// TypedValueSetter returns a ValueSetter utilizing valueMaker, which should implement one or more *Maker interfaces.
-func TypedValueSetter(valueMaker interface{}) ValueSetter {
-	return &typedValueSetter{valueMaker}
+// TypedInjector returns an Injector utilizing valueMaker, which should implement one or more *Maker interfaces.
+func TypedInjector(valueMaker interface{}) Injector {
+	return &typedInjector{valueMaker}
 }
 
-// A typedValueSetter adapts valueMaker to ValueSetter.
-type typedValueSetter struct {
+// A typedInjector adapts valueMaker to Injector.
+type typedInjector struct {
 	// valueMaker should implement one or more *Maker interfaces.
 	valueMaker interface{}
 }
 
-// Sets value based on tagValue, if the valueMaker supports value's Kind.
-// Implements ValueSetter.
-func (tvs typedValueSetter) SetValue(value reflect.Value, tagValue string) (bool, error) {
+// Injects value based on tagValue, if the valueMaker supports value's Kind.
+// Implements Injector.
+func (tvs typedInjector) Inject(value reflect.Value, tagValue string) (bool, error) {
 	kind := value.Kind()
 	switch kind {
 	case reflect.String:
@@ -75,7 +75,7 @@ func (tvs typedValueSetter) SetValue(value reflect.Value, tagValue string) (bool
 		if !ok {
 			return false, &UnsupportedKindError{reflect.Slice}
 		}
-		set, made, err := sliceValueMaker.MakeSlice(tagValue, value.Elem().Type())
+		set, made, err := sliceValueMaker.MakeSlice(tagValue, value.Type())
 		if err != nil {
 			return false, err
 		} else if set {
@@ -181,4 +181,13 @@ func complexSetter(bitSize int, valueMaker interface{}, value reflect.Value, tag
 		value.SetComplex(c128)
 	}
 	return set, nil
+}
+
+// An UnsupportedKindError indicates that a value maker does not support a certain reflect.Kind.
+type UnsupportedKindError struct {
+	reflect.Kind
+}
+
+func (e *UnsupportedKindError) Error() string {
+	return "value maker does not support kind: " + e.Kind.String()
 }

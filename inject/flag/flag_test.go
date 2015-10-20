@@ -1,42 +1,38 @@
-package env
+package flag
 
 import (
-	"os"
+	"flag"
 	"reflect"
 	"testing"
 )
 
-func TestValueSetter(t *testing.T) {
+func TestInjector(t *testing.T) {
 	for _, testCase := range []struct {
 		value    reflect.Value
 		tagValue string
-		envVars  map[string]string
+		args     []string
 		expected reflect.Value
 	}{
 		{
 			reflect.New(reflect.TypeOf("")).Elem(),
-			"envVarName",
-			map[string]string{
-				"envVarName": "value",
-			},
+			"flagName",
+			[]string{"-flagName", "value"},
 			reflect.ValueOf("value"),
 		},
 		{
 			reflect.New(reflect.TypeOf(0)).Elem(),
-			"envVarName",
-			map[string]string{
-				"envVarName": "1234",
-			},
+			"flagName",
+			[]string{"-flagName", "1234"},
 			reflect.ValueOf(1234),
 		},
 	} {
-		os.Clearenv()
-		for k, v := range testCase.envVars {
-			if err := os.Setenv(k, v); err != nil {
-				t.Errorf("failed to set environment variable", err)
-			}
+		flags := flag.NewFlagSet("test set", flag.ContinueOnError)
+		flags.String(testCase.tagValue, "", "")
+		if err := flags.Parse(testCase.args); err != nil {
+			t.Fatalf("failed to set command line flags: ", err)
 		}
-		if ok, err := valueSetterFunc(testCase.value, testCase.tagValue); err != nil {
+
+		if ok, err := (&injector{flags}).Inject(testCase.value, testCase.tagValue); err != nil {
 			t.Error(err)
 		} else if !ok {
 			t.Error("expected value to be set")

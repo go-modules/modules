@@ -1,7 +1,7 @@
-// package file provides a ValueSetter for file imput
+// package file provides an Injector for file imput
 // note different behavior for File compared to others
 
-// Package file provides a tags.ValueSetter for file input.
+// Package file provides an inject.Injector for file input.
 // The tag value is used as the filename.
 // Values of type *os.File will be set normally.
 // Other values will be depending on the file type.
@@ -14,16 +14,18 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"github.com/go-modules/modules/tags"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
+
+	"github.com/go-modules/modules/inject"
+	"github.com/go-modules/modules/tags"
 )
 
-var ValueSetter = tags.ValueSetterFunc(valueSetterFunc)
+var Injector = inject.InjectorFunc(Inject)
 
-func valueSetterFunc(value reflect.Value, tagValue string) (bool, error) {
+func Inject(value reflect.Value, tagValue string) (bool, error) {
 	if typeOfFile.AssignableTo(value.Type()) || typeOfFile.ConvertibleTo(value.Type()) {
 		file, err := os.Open(tagValue)
 		if err != nil {

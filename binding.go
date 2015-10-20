@@ -50,9 +50,9 @@ func (b *binding) inject(key bindKey, fieldValue reflect.Value) {
 }
 
 // provide binds value to key.
-// Each recognized tag key's tags.ValueSetter will be executed until one sets the value.
+// Each recognized tag key's inject.Injector will be executed until one sets the value.
 func (b *binding) provide(key bindKey, singleton bool, tag tags.StructTag, value reflect.Value) error {
-	// Range over tag fields until a known tag key's tags.ValueSetter sets the value.
+	// Range over tag fields until a known tag key's inject.Injector sets the value.
 	tag.ForEach(tags.Handler(func(tagKey, v string) (bool, error) {
 		if tagKey == "provide" {
 			return false, nil
@@ -60,8 +60,8 @@ func (b *binding) provide(key bindKey, singleton bool, tag tags.StructTag, value
 		if tagKey == "inject" {
 			return false, errors.New(fmt.Sprintf("failed to parse tags for value %s ;a module field tagged with 'provide' cannot also be tagged with 'inject'", key))
 		}
-		if valueSetter, ok := b.valueSetters[tagKey]; ok {
-			if ok, err := valueSetter.SetValue(value, v); err != nil {
+		if injector, ok := b.injectors[tagKey]; ok {
+			if ok, err := injector.Inject(value, v); err != nil {
 				// Failed to set value.
 				return false, &AnnotatedError{msg: fmt.Sprintf("failed to provide value for %s from tag key %s", key, tagKey), cause: err}
 			} else if ok {

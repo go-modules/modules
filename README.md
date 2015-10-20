@@ -62,7 +62,7 @@ func (m *Module) Provide() {
 }
 ```
 
-Additionally, a *Binder* may be configured to recognize certain tag keys and call a *ValueSetter* to set a value.
+Additionally, a *Binder* may be configured to recognize certain tag keys and call an *Injector* to set a value.
 The 'literal' tag key is built-in, and parses string tag values into standard supported types.
 ```go
 type module struct {
@@ -89,33 +89,33 @@ _ := binder.Bind(appModule, dataModule, serviceModule)
 This call binds 3 modules. Each module's provided fields are available for injection into any module.
 
 
-### Tags and ValueSetters
-The functional option *ValueSetters* can be used to map tag keys (anything besides "provide" and "inject") to custom or
-third party *ValueSetter*s.
+### Tags and Injectors
+The functional option *Injectors* can be used to map tag keys (anything besides "provide" and "inject") to custom or
+third party *Injector*s.
 ```go
-valueSetters := modules.ValueSetters(map[string]ValueSetter{
-  "customTag": customTag.ValueSetter,
+injectors := modules.Injectors(map[string]Injector{
+  "customTag": customTag.Injector,
 })
-binder := modules.NewBinder(valueSetters)
+binder := modules.NewBinder(injectors)
 module := struct{
   FieldA CustomType 'provide:"someField" customTag:"tagValueArgument"'
 }
 _ := binder.Bind(module)
 ```
-When this module is bound, *customTag.ValueSetter* may set the value of FieldA based on the tag value "tagValueArgument".
+When this module is bound, *customTag.Injector* may set the value of FieldA based on the tag value "tagValueArgument".
 
-The *ValueSetter* interface is defined in the tags package.
+The *Injector* interface is defined in the inject package.
 ```go
-// A ValueSetter sets a value based on a string.
-type ValueSetter interface {
+// An Injector sets a value based on a string.
+type Injector interface {
 	// May set a value based on string.
 	// Returns (true, nil) when a value has been set, or (false, nil) when a value has not been set (e.g. environment
 	// variable not set, file not found, etc.).
-	SetValue(reflect.Value, string) (bool, error)
+	Inject(reflect.Value, string) (bool, error)
 }
 ```
 
-If a field is tagged with multiple keys, *SetValue* will be called for each *ValueSetter* until one sets the value.
+If a field is tagged with multiple keys, *Inject* will be called for each *Injector* until one sets the value.
 ```go
 module := struct{
   Field string `provide:"setting" flag:"setting" env:"SETTING" literal:"defaultValue"`

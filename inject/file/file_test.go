@@ -21,7 +21,7 @@ type GobType struct {
 	Test string
 }
 
-func TestValueSetter(t *testing.T) {
+func TestInjector(t *testing.T) {
 
 	for _, testCase := range []struct {
 		value    reflect.Value
@@ -57,7 +57,7 @@ func TestValueSetter(t *testing.T) {
 			expected: reflect.ValueOf("test"),
 		},
 	} {
-		if ok, err := valueSetterFunc(testCase.value, testCase.tagValue); err != nil {
+		if ok, err := Inject(testCase.value, testCase.tagValue); err != nil {
 			t.Error(err)
 		} else if !ok {
 			t.Errorf("%s: expected value to be set", testCase.tagValue)
@@ -67,7 +67,7 @@ func TestValueSetter(t *testing.T) {
 	}
 
 	var f os.File
-	if ok, err := valueSetterFunc(reflect.ValueOf(&f), "test.txt"); err != nil {
+	if ok, err := Inject(reflect.ValueOf(&f), "test.txt"); err != nil {
 		t.Error(err)
 	} else if !ok {
 		t.Error("expected file value to be set")

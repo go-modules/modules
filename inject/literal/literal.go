@@ -1,4 +1,4 @@
-// Package literal provides a tags.ValueSetter that parses string literals into values.
+// Package literal provides an inject.Injector that parses string literals into values.
 //
 // Supported Kinds: Bool, Int, Uint, Float, Complex, Chan; Slice and Array (of supported Kinds);
 // Func (parameterless, single return, with string assignable/convertible to the return type);
@@ -11,14 +11,15 @@ package literal
 import (
 	"errors"
 	"fmt"
-	"github.com/go-modules/modules/tags"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/go-modules/modules/inject"
 )
 
-// ValueSetter is a tags.ValueSetter for parsing string literals.
-var ValueSetter = tags.TypedValueSetter(&valueMaker{})
+// Injector is a inject.Injector for parsing string literals.
+var Injector = inject.TypedInjector(&valueMaker{})
 
 // valueMaker implements a subset of tags.*Maker interfaces.
 type valueMaker struct{}
@@ -92,10 +93,10 @@ func (valueMaker) MakeSlice(str string, typeOfSlice reflect.Type) (bool, uintptr
 	typeOfElem := typeOfSlice.Elem()
 	for i, str := range elements {
 		elem := reflect.New(typeOfElem).Elem()
-		if _, err := ValueSetter.SetValue(elem, str); err != nil {
+		if _, err := Injector.Inject(elem, str); err != nil {
 			errs = append(errs, fmt.Sprintf("element %d - %s", i, err.Error()))
 		} else {
-			// Note that if SetValue did not set the value of elem then it will be zero valued.
+			// Note that if Inject did not set the value of elem then it will be zero valued.
 			slice = reflect.Append(slice, elem)
 		}
 	}
@@ -118,10 +119,10 @@ func (valueMaker) MakeArray(str string, typeOfElem reflect.Type) (bool, uintptr,
 
 	for i, str := range elements {
 		elem := reflect.New(typeOfElem)
-		if _, err := ValueSetter.SetValue(elem, str); err != nil {
+		if _, err := Injector.Inject(elem, str); err != nil {
 			errs = append(errs, fmt.Sprintf("element %d - %s", i, err.Error()))
 		} else {
-			// Note that if SetValue did not set the value of elem then it will be zero valued.
+			// Note that if Inject did not set the value of elem then it will be zero valued.
 			array.Index(i).Set(elem)
 		}
 	}

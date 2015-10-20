@@ -4,15 +4,17 @@ package modules
 import (
 	"errors"
 	"fmt"
-	"github.com/go-modules/modules/tags"
-	"github.com/go-modules/modules/tags/env"
-	"github.com/go-modules/modules/tags/file"
-	"github.com/go-modules/modules/tags/flag"
-	"github.com/go-modules/modules/tags/literal"
 	"io"
 	"log"
 	"reflect"
 	"sync"
+
+	"github.com/go-modules/modules/inject"
+	"github.com/go-modules/modules/inject/env"
+	"github.com/go-modules/modules/inject/file"
+	"github.com/go-modules/modules/inject/flag"
+	"github.com/go-modules/modules/inject/literal"
+	"github.com/go-modules/modules/tags"
 )
 
 // A Provider is a binding module that implements the Provide() method.
@@ -28,18 +30,18 @@ type Provider interface {
 type Binder struct {
 	// The logger (if present) will receive informational binding messages.
 	logger *log.Logger
-	// The ValueSetters by tag key.
-	valueSetters map[string]tags.ValueSetter
+	// Injectors by tag key.
+	injectors map[string]inject.Injector
 }
 
 // NewBinder initializes a new Binder instance, and applies options.
 func NewBinder(options ...BinderOption) *Binder {
 	b := &Binder{
-		valueSetters: map[string]tags.ValueSetter{
-			"literal": literal.ValueSetter,
-			"env":     env.ValueSetter,
-			"flag":    flag.ValueSetter,
-			"file":    file.ValueSetter,
+		injectors: map[string]inject.Injector{
+			"literal": literal.Injector,
+			"env":     env.Injector,
+			"flag":    flag.Injector,
+			"file":    file.Injector,
 		},
 	}
 
@@ -63,16 +65,16 @@ func (l Logger) configure(b *Binder) {
 	b.logger = log.New(l, "modules: ", log.LstdFlags)
 }
 
-// ValueSetters is a functional option that adds mapped ValueSetters to a Binder.
-type ValueSetters map[string]tags.ValueSetter
+// Injectors is a functional option that adds mapped Injectors to a Binder.
+type Injectors map[string]inject.Injector
 
-func (v ValueSetters) configure(b *Binder) {
+func (v Injectors) configure(b *Binder) {
 	for k, v := range v {
-		b.valueSetters[k] = v
+		b.injectors[k] = v
 	}
 }
 
-// Binds modules. Calls Provide() on modules implementing Provider, calls tags.ValueSetters for tagged fields, and
+// Binds modules. Calls Provide() on modules implementing Provider, calls inject.Injectors for tagged fields, and
 // injects provided fields.
 func (binder *Binder) Bind(modules ...interface{}) error {
 	binding := newBinding(binder)
@@ -80,10 +82,10 @@ func (binder *Binder) Bind(modules ...interface{}) error {
 	errs := make([]error, 0)
 
 	// Validate configuration
-	if _, ok := binding.valueSetters["provide"]; ok {
+	if _, ok := binding.injectors["provide"]; ok {
 		return errors.New("the 'provide' tag key may not be overridden")
 	}
-	if _, ok := binding.valueSetters["inject"]; ok {
+	if _, ok := binding.injectors["inject"]; ok {
 		return errors.New("the 'inject' tag key may not be overridden")
 	}
 
