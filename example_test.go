@@ -30,15 +30,15 @@ func (client *MapDBClient) Put(key, value string) {
 
 // A service module has a 'GetData' service which utilizes an injected DBClient.
 type ServiceModule struct {
-	Client func() KVClient `inject:""`
+	KVClient KVClient `inject:""`
 }
 
 func (service *ServiceModule) GetData(key string) string {
-	return service.Client().Get(key)
+	return service.KVClient.Get(key)
 }
 
 func (service *ServiceModule) StoreData(key, value string) {
-	service.Client().Put(key, value)
+	service.KVClient.Put(key, value)
 }
 
 type defaultValue string
@@ -46,29 +46,22 @@ type defaultValue string
 // This data module provides a Client function for retrieving a KVClient, which returns a DBClient configured with the
 // injected default value.
 type DataModule struct {
-	DefaultValue defaultValue    `inject:""`
-	Client       func() KVClient `provide:",singleton"`
+	DefaultValue defaultValue
+	KVClient KVClient `provide:""`
 }
 
 func (data *DataModule) Provide() error {
-	data.Client = func() KVClient {
-		return &MapDBClient{defaultValue: string(data.DefaultValue), db: make(map[string]string)}
-	}
+	data.KVClient = &MapDBClient{defaultValue: string(data.DefaultValue), db: make(map[string]string)}
 	return nil
 }
 
 func Example() {
 	serviceModule := &ServiceModule{}
 
-	// This config module provides the default value required by the data module.
-	configModule := &struct {
-		DefaultValue defaultValue `provide:""`
-	}{
-		DefaultValue: "default",
-	}
+	dataModule := &DataModule{DefaultValue: "default"}
 
 	binder := NewBinder()
-	if err := binder.Bind(serviceModule, &DataModule{}, configModule); err != nil {
+	if err := binder.Bind(serviceModule, dataModule); err != nil {
 		panic(err)
 	}
 
