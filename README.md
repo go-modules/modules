@@ -82,7 +82,7 @@ binder := modules.NewBinder(modules.LogWriter(os.Stdout))
 This binder logs information to stdout.
 
 The *Bind* method binds a set of modules. All binding and injection occurs during this call. Modules implementing
-*Provider* will have their *Provide* method called. Exported module fields are scanned for 'provide', 'inject' or other
+*Provider* will have their *Provide* method called. Exported fields are inspected for 'provide', 'inject' or other
 registered tag keys.
 ```go
 _ := binder.Bind(appModule, dataModule, serviceModule)
