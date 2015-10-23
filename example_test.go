@@ -43,8 +43,7 @@ func (service *ServiceModule) StoreData(key, value string) {
 
 type defaultValue string
 
-// This data module provides a Client function for retrieving a KVClient, which returns a DBClient configured with the
-// injected default value.
+// This data module provides a KVClient.
 type DataModule struct {
 	DefaultValue defaultValue
 	KVClient KVClient `provide:""`
