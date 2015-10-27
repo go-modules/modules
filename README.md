@@ -3,8 +3,6 @@ A dependency injection library using struct tags.
 
 - [Slack channel](https://gophers.slack.com/messages/go-modules/)
 
-This project is currently alpha and subject to experimental change.
-
 ## Overview
 This library simplifies the wiring of an application by injecting dependencies between modules.
 
@@ -43,8 +41,10 @@ Fields may be set normally prior to binding.
 module := struct {
   FieldA string 'provide:"provideMe"'
 } {
-  FieldA: "providedValue"
+  FieldA: "value"
 }
+// or
+module.FieldA = "value"
 ```
 
 Modules implementing the *Provider* interface may set fields from the *Provide* method.
@@ -54,10 +54,11 @@ type module struct {
   Func func() string 'provide:"provideMe"'
 }
 // Implements modules.Provider
-func (m *Module) Provide() {
+func (m *Module) Provide() error {
   m.Func = func() string {
     return = m.Field
   }
+  return nil
 }
 ```
 The *Provide* method is called during binding. Injected fields have not yet necessarily been set when *Provide* is
@@ -72,6 +73,10 @@ type module struct {
   FieldC complex128 'provide:"complexField" literal:"-1,1"'
 }
 ```
+Other built-in tag keys include:
+- 'env' for environment variables
+- 'file' for os.File handles, and decoding of txt, json, xml, and gob
+- 'flag' for command line arguments
 
 ### Binders
 Modules are bound using a *Binder*. Binders are created with the *NewBinder* function, which optionally
@@ -95,7 +100,7 @@ The functional option *Injectors* can be used to map tag keys (anything besides 
 third party *Injector*s.
 ```go
 injectors := modules.Injectors(map[string]Injector{
-  "customTag": customTag.Injector,
+  "customTag": customInjector,
 })
 binder := modules.NewBinder(injectors)
 module := struct{
@@ -103,7 +108,7 @@ module := struct{
 }
 _ := binder.Bind(module)
 ```
-When this module is bound, *customTag.Injector* may set the value of FieldA based on the tag value "tagValueArgument".
+When this module is bound, *customInjector* may set the value of FieldA based on the tag value "tagValueArgument".
 
 The *Injector* interface is defined in the inject package.
 ```go
