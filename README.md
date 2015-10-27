@@ -129,3 +129,5 @@ module := struct{
 ```
 This module provides a string value named 'setting', which may be set via a command-line flag or environment variable,
 and which falls back to the default literal 'defaultValue'.
+
+See the [GoDoc](https://godoc.org/github.com/go-modules/modules) for more api documentation, and a working example.
