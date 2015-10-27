@@ -56,7 +56,7 @@ type module struct {
 // Implements modules.Provider
 func (m *Module) Provide() error {
   m.Func = func() string {
-    return = m.Field
+    return m.Field
   }
   return nil
 }
