@@ -51,12 +51,12 @@ Modules implementing the *Provider* interface may set fields from the *Provide* 
 ```go
 type module struct {
   Field string 'inject:"injectMe"'
-  Func func() string 'provide:"provideMe"'
+  Connection func() Connection 'provide:"provideMe"'
 }
 // Implements modules.Provider
 func (m *Module) Provide() error {
-  m.Func = func() string {
-    return m.Field
+  m.ConnectionProvider = func() Connection {
+    return NewConnection(m.Field)
   }
   return nil
 }
