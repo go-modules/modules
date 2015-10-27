@@ -6,7 +6,7 @@ A dependency injection library using struct tags.
 ## Overview
 This library simplifies the wiring of an application by injecting dependencies between modules.
 
-A *module* is go struct containing fields tagged with 'inject' or 'provide' keys. When a set of modules are
+A *module* is a go struct containing fields tagged with 'inject' or 'provide' keys. When a set of modules are
 *bound*, fields tagged 'inject' are set with values from corresponding fields tagged 'provide', respecting type and
  name. Provided fields may be set normally prior to binding, during binding from a module's *Provide* method, or from
  *Injector*s triggered by additional tag keys.
