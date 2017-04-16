@@ -1,8 +1,6 @@
 # Go Modules [![GoDoc](https://godoc.org/github.com/go-modules/modules?status.svg)](https://godoc.org/github.com/go-modules/modules) [![Build Status](https://travis-ci.org/go-modules/modules.svg)](https://travis-ci.org/go-modules/modules) [![Go Report Card](https://goreportcard.com/badge/github.com/go-modules/modules)](https://goreportcard.com/report/github.com/go-modules/modules)
 A dependency injection library using struct tags.
 
-- [Slack channel](https://gophers.slack.com/messages/go-modules/)
-
 ## Overview
 This library simplifies the wiring of an application by injecting dependencies between modules.
 
