@@ -3,7 +3,7 @@ package inject
 
 import "reflect"
 
-// A Injector sets a value based on a string.
+// An Injector sets a value based on a string.
 type Injector interface {
 	// May set a value based on string.
 	// Returns (true, nil) when a value has been set, or (false, nil) when a value has not been set (e.g. environment

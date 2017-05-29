@@ -3,9 +3,10 @@ package modules
 import (
 	"errors"
 	"fmt"
-	"github.com/go-modules/modules/tags"
 	"reflect"
 	"sync"
+
+	"github.com/go-modules/modules/tags"
 )
 
 // newBinding returns a new binding configured with binder
@@ -33,7 +34,7 @@ type binding struct {
 	errors chan error
 }
 
-// Injects the value bound to bindName into value.
+// Inject injectss the value bound to bindName into value.
 func (b *binding) inject(bindName string, value reflect.Value) {
 	key := bindKey{value.Type(), bindName}
 	// Wait to inject this field after it has been provided, or binding cancelled.
@@ -105,7 +106,7 @@ type fields struct {
 	m map[bindKey]reflect.Value
 }
 
-// The get method retrieves the value bound to key.
+// get retrieves the value bound to key.
 func (f *fields) get(key bindKey) (reflect.Value, bool) {
 	f.RLock()
 	value, ok := f.m[key]
@@ -113,7 +114,7 @@ func (f *fields) get(key bindKey) (reflect.Value, bool) {
 	return value, ok
 }
 
-// Bind binds value to key.
+// bind binds value to key.
 func (f *fields) bind(key bindKey, value reflect.Value) {
 	f.Lock()
 	f.m[key] = value
@@ -123,7 +124,7 @@ func (f *fields) bind(key bindKey, value reflect.Value) {
 // A gate is a channel intended to be closed to broadcast a signal to receivers.
 type gate chan struct{}
 
-// The newGate function returns a new gate instance.
+// newGate returns a new gate instance.
 func newGate() gate {
 	return gate(make(chan struct{}))
 }

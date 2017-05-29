@@ -88,7 +88,7 @@ func (tag StructTag) Get(key string) (string, bool) {
 // Copy of unexported type tagOptions from encoding/json/tags.go
 type TagOptions string
 
-// parseTag splits a struct field's json tag into its name and
+// ParseTag splits a struct field's json tag into its name and
 // comma-separated options.
 func ParseTag(tag string) (string, TagOptions) {
 	if idx := strings.Index(tag, ","); idx != -1 {

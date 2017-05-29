@@ -10,6 +10,7 @@ import (
 	"github.com/go-modules/modules/inject/literal"
 )
 
+// Injector is an inject.Injector for parsing command line flags.
 var Injector = &injector{stdFlag.CommandLine}
 
 // An injector wraps a FlagSet and implements inject.Injector
@@ -17,10 +18,10 @@ type injector struct {
 	*stdFlag.FlagSet
 }
 
-// Looks up the environment variable tagValue. Returned string is parsed and used to set value via literal.Injector.
-// Only sets value if the environment variable is set, otherwise passes by returning (false, nil).
-func (v injector) Inject(value reflect.Value, tagValue string) (bool, error) {
-	f := v.Lookup(tagValue)
+// Inject looks up the flag by name and sets the value via literal.Injector.
+// Only sets value if the flag is set, otherwise passes by returning (false, nil).
+func (v injector) Inject(value reflect.Value, name string) (bool, error) {
+	f := v.Lookup(name)
 	if f == nil || f.Value.String() == "" {
 		return false, nil
 	}

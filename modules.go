@@ -74,8 +74,8 @@ func (v Injectors) configure(b *Binder) {
 	}
 }
 
-// Binds modules. Calls Provide() on modules implementing Provider, calls inject.Injectors for tagged fields, and
-// injects provided fields.
+// Bind binds modules. Calls Provide() on modules implementing Provider, calls
+// inject.Injectors for tagged fields, and injects provided fields.
 func (binder *Binder) Bind(modules ...interface{}) error {
 	binding := newBinding(binder)
 	// Holds errors during binding.
@@ -149,7 +149,7 @@ func (binder *Binder) Bind(modules ...interface{}) error {
 	return nil
 }
 
-// Logs to b's Logger, if present.
+// logf logs to b's Logger, if present.
 func (b *Binder) logf(fmt string, a ...interface{}) {
 	if b.logger != nil {
 		b.logger.Printf(fmt, a...)

@@ -10,12 +10,13 @@ import (
 	"github.com/go-modules/modules/inject/literal"
 )
 
+// Injector is an inject.Injector for parsing environment variables.
 var Injector = inject.InjectorFunc(Inject)
 
-// Looks up the environment variable tagValue. Returned string is parsed and used to set value via literal.Injector.
+// Inject looks up the environment variable by name, and sets the value via literal.Injector.
 // Only sets value if the environment variable is set, otherwise passes by returning (false, nil).
-func Inject(value reflect.Value, tagValue string) (bool, error) {
-	envValue, ok := os.LookupEnv(tagValue)
+func Inject(value reflect.Value, name string) (bool, error) {
+	envValue, ok := os.LookupEnv(name)
 	if !ok {
 		return false, nil
 	}

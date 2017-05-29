@@ -1,6 +1,3 @@
-// package file provides an Injector for file imput
-// note different behavior for File compared to others
-
 // Package file provides an inject.Injector for file input.
 // The tag value is used as the filename.
 // Values of type *os.File will be set normally.
@@ -23,19 +20,20 @@ import (
 	"github.com/go-modules/modules/tags"
 )
 
+// Injector is an inject.Injector for file input.
 var Injector = inject.InjectorFunc(Inject)
 
-func Inject(value reflect.Value, tagValue string) (bool, error) {
+// Inject opens opens a file and sets the value via literal.Injector.
+func Inject(value reflect.Value, fileName string) (bool, error) {
 	if typeOfFile.AssignableTo(value.Type()) || typeOfFile.ConvertibleTo(value.Type()) {
-		file, err := os.Open(tagValue)
+		file, err := os.Open(fileName)
 		if err != nil {
 			return false, err
 		}
-		fmt.Printf("%s\n", value)
 		value.Elem().Set(reflect.ValueOf(file).Elem())
 		return true, nil
 	} else {
-		tag, optionalType := tags.ParseTag(tagValue)
+		tag, optionalType := tags.ParseTag(fileName)
 		file, err := os.Open(tag)
 		if err != nil {
 			return false, err

@@ -46,7 +46,7 @@ type defaultValue string
 // This data module provides a KVClient.
 type DataModule struct {
 	DefaultValue defaultValue
-	KVClient KVClient `provide:""`
+	KVClient     KVClient `provide:""`
 }
 
 func (data *DataModule) Provide() error {

@@ -13,7 +13,7 @@ type typedInjector struct {
 	valueMaker interface{}
 }
 
-// Injects value based on tagValue, if the valueMaker supports value's Kind.
+// Inject injects value based on tagValue, if the valueMaker supports value's Kind.
 // Implements Injector.
 func (tvs typedInjector) Inject(value reflect.Value, tagValue string) (bool, error) {
 	kind := value.Kind()

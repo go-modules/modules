@@ -18,47 +18,42 @@ import (
 	"github.com/go-modules/modules/inject"
 )
 
-// Injector is a inject.Injector for parsing string literals.
+// Injector is an inject.Injector for parsing string literals.
 var Injector = inject.TypedInjector(&valueMaker{})
 
 // valueMaker implements a subset of tags.*Maker interfaces.
 type valueMaker struct{}
 
-// Passes str through as is.
+// MakeString passes str through as is.
 func (valueMaker) MakeString(str string) (bool, string, error) {
 	return true, str, nil
 }
 
-// Parses str into a bool value.
-// Implements tags.BoolMaker
+// MakeBool parses str into a bool value.
 func (valueMaker) MakeBool(str string) (bool, bool, error) {
 	val, err := strconv.ParseBool(str)
 	return true, val, err
 }
 
-// Parses str into an int value.
-// Implements tags.IntMaker
+// MakeInt parses str into an int value.
 func (valueMaker) MakeInt(str string, bitSize int) (bool, int64, error) {
 	val, err := strconv.ParseInt(str, 10, bitSize)
 	return true, val, err
 }
 
-// Parses str into a uint value.
-// Implements tags.UintMaker
+// MakeUint parses str into a uint value.
 func (valueMaker) MakeUint(str string, bitSize int) (bool, uint64, error) {
 	val, err := strconv.ParseUint(str, 10, bitSize)
 	return true, val, err
 }
 
-// Parses str into a float value.
-// Implements tags.FloatMaker
+// MakeFloat parses str into a float value.
 func (valueMaker) MakeFloat(str string, bitSize int) (bool, float64, error) {
 	val, err := strconv.ParseFloat(str, bitSize)
 	return true, val, err
 }
 
-// Parses str into a complex value.
-// Implements tags.ComplexMaker
+// MakeComplex parses str into a complex value.
 func (valueMaker) MakeComplex(str string, bits int) (bool, complex128, error) {
 	values := strings.Split(str, ",")
 	if values == nil || len(values) != 2 {
@@ -81,9 +76,8 @@ func (valueMaker) MakeComplex(str string, bits int) (bool, complex128, error) {
 	return true, complex(real, imaginary), nil
 }
 
-// Parses str into a slice of typeOfElem.
+// MakeSlice parses str into a slice of typeOfElem.
 // Returns a pointer to a slice populated with comma separated values parsed from str.
-// Implements tags.SliceMaker
 func (valueMaker) MakeSlice(str string, typeOfSlice reflect.Type) (bool, uintptr, error) {
 	elements := strings.Split(str, ",")
 
@@ -108,9 +102,8 @@ func (valueMaker) MakeSlice(str string, typeOfSlice reflect.Type) (bool, uintptr
 	return true, slice.Pointer(), nil
 }
 
-// Parses str into an array of typeOfElem.
+// MakeArray parses str into an array of typeOfElem.
 // Returns a pointer to an array populated with comma separated values parsed from str.
-// Implements tags.ArrayMaker
 func (valueMaker) MakeArray(str string, typeOfElem reflect.Type) (bool, uintptr, error) {
 	elements := strings.Split(str, ",")
 
@@ -133,9 +126,8 @@ func (valueMaker) MakeArray(str string, typeOfElem reflect.Type) (bool, uintptr,
 	return true, array.Pointer(), nil
 }
 
-// Parses str into a chan of typeOfElem.
+// MakeChan parses str into a chan of typeOfElem.
 // Returns a pointer to a channel of type typeOfElem with a buffer size parsed from str.
-// Implements tags.ChanMaker
 func (valueMaker) MakeChan(str string, typeOfElem reflect.Type) (bool, uintptr, error) {
 	i, err := strconv.Atoi(str)
 	if err != nil {
@@ -147,9 +139,8 @@ func (valueMaker) MakeChan(str string, typeOfElem reflect.Type) (bool, uintptr, 
 	return true, c.Pointer(), nil
 }
 
-// Parses str into a typeOfFn function.
+// MakeFunc parses str into a typeOfFn function.
 // Returns a pointer to a function which always returns str.
-// Implements tags.FuncMaker
 func (valueMaker) MakeFunc(str string, typeOfFn reflect.Type) (bool, uintptr, error) {
 	typeOfFnRet := typeOfFn.Out(0)
 	ret := make([]reflect.Value, 1)
@@ -166,8 +157,7 @@ func (valueMaker) MakeFunc(str string, typeOfFn reflect.Type) (bool, uintptr, er
 	return true, f.Pointer(), nil
 }
 
-// Returns a uintPtr to str.
-// Implements tags.UintPtrMaker
+// MakeUintptr returns a uintPtr to str.
 func (valueMaker) MakeUintptr(str string, base int, bitSize int) (bool, uintptr, error) {
 	return true, reflect.ValueOf(str).Pointer(), nil
 }
