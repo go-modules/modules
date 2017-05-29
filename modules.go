@@ -76,8 +76,8 @@ func (v Injectors) configure(b *Binder) {
 
 // Bind binds modules. Calls Provide() on modules implementing Provider, calls
 // inject.Injectors for tagged fields, and injects provided fields.
-func (binder *Binder) Bind(modules ...interface{}) error {
-	binding := newBinding(binder)
+func (b *Binder) Bind(modules ...interface{}) error {
+	binding := newBinding(b)
 	// Holds errors during binding.
 	errs := make([]error, 0)
 

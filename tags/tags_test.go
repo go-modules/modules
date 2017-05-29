@@ -20,9 +20,9 @@ func TestForEach(t *testing.T) {
 	} {
 		handled = false
 		if err := testTag.ForEach(handler); err != nil {
-			t.Errorf("failed to handle tag", err)
+			t.Errorf("failed to handle tag: %s", err)
 		} else if !handled {
-			t.Errorf("expected tag to be handled")
+			t.Error("expected tag to be handled")
 		}
 	}
 
@@ -33,9 +33,9 @@ func TestForEach(t *testing.T) {
 	} {
 		handled = false
 		if err := testTag.ForEach(handler); err != nil {
-			t.Errorf("failed to handle tag", err)
+			t.Errorf("failed to handle tag: %s", err)
 		} else if handled {
-			t.Errorf("expected tag to be skipped")
+			t.Error("expected tag to be skipped")
 		}
 	}
 }
@@ -47,9 +47,9 @@ func TestGet(t *testing.T) {
 		`key2:"value2" key1:"value1" key3:"value3"`,
 	} {
 		if value, ok := testCase.Get("key1"); !ok {
-			t.Errorf("expected to find key1")
+			t.Error("expected to find key1")
 		} else if value != "value1" {
-			t.Errorf("expected value1 got %q", value)
+			t.Errorf(`expected "value1" got %q`, value)
 		}
 	}
 }

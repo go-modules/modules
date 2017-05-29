@@ -74,6 +74,6 @@ func TestInjector(t *testing.T) {
 	} else if bytes, err := ioutil.ReadAll(&f); err != nil {
 		t.Error(err)
 	} else if string(bytes) != "test" {
-		t.Errorf(`%s: expected "test" but got %q`, string(bytes))
+		t.Errorf(`file: expected "test" but got %q`, string(bytes))
 	}
 }

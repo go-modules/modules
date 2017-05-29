@@ -33,7 +33,7 @@ func TestInjector(t *testing.T) {
 		os.Clearenv()
 		for k, v := range testCase.envVars {
 			if err := os.Setenv(k, v); err != nil {
-				t.Errorf("failed to set environment variable", err)
+				t.Errorf("failed to set environment variable: %s", err)
 			}
 		}
 		if ok, err := Inject(testCase.value, testCase.tagValue); err != nil {

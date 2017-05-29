@@ -26,13 +26,13 @@ func TestInjector(t *testing.T) {
 			reflect.ValueOf(1234),
 		},
 	} {
-		flags := flag.NewFlagSet("test set", flag.ContinueOnError)
-		flags.String(testCase.tagValue, "", "")
-		if err := flags.Parse(testCase.args); err != nil {
-			t.Fatalf("failed to set command line flags: ", err)
+		fs := flag.NewFlagSet("test set", flag.ContinueOnError)
+		fs.String(testCase.tagValue, "", "")
+		if err := fs.Parse(testCase.args); err != nil {
+			t.Fatalf("failed to set command line fs: %s", err)
 		}
 
-		if ok, err := (&injector{flags}).Inject(testCase.value, testCase.tagValue); err != nil {
+		if ok, err := (&injector{fs}).Inject(testCase.value, testCase.tagValue); err != nil {
 			t.Error(err)
 		} else if !ok {
 			t.Error("expected value to be set")

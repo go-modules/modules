@@ -89,7 +89,7 @@ func TestInject(t *testing.T) {
 	}
 	for _, testCase := range testCases {
 		if b, err := constantInjector.Inject(testCase.value, ""); err != nil {
-			t.Errorf("unexpected error: ", err)
+			t.Errorf("unexpected error: %s", err)
 		} else if !b {
 			t.Error("expected value to be set")
 		} else if !reflect.DeepEqual(testCase.expected.Interface(), testCase.value.Interface()) {

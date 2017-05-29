@@ -9,7 +9,7 @@ import (
 	"github.com/go-modules/modules/tags"
 )
 
-// newBinding returns a new binding configured with binder
+// newBinding returns a new binding configured with b
 func newBinding(binder *Binder) *binding {
 	return &binding{
 		binder,
